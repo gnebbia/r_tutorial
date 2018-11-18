@@ -149,6 +149,30 @@ colnames(b) <- c("aa", "bb", "cc")
 colnames(b)[1] <- "abc"
 ```
 
+### Merging Stuff
+
+```R
+data(iris)
+
+ds1 = iris %>% select("Sepal.Length")
+ds1 = cbind(ds1, c = seq(1,150))
+ds2 = iris %>% select("Species")
+ds2 = cbind(ds2, c = seq(1,150))
+
+# Merge on common field name
+merged_ds = merge(ds1, ds2, by='c')
+
+ds1 = iris %>% select("Sepal.Length")
+ds1 = cbind(ds1, c = seq(1,150))
+ds2 = iris %>% select("Species")
+ds2 = cbind(ds2, d = seq(1,150))
+
+# Merge on fields with different field name
+merged_ds = merge(ds1, ds2, by.x='c', by.y='d')
+
+merge(ds1, ds2, by='c')
+```
+
 
 
 ## Summary Statistics
@@ -156,17 +180,17 @@ colnames(b)[1] <- "abc"
 
 Summary statistics: Some useful function calls for summary statistics for a single numerical variable are as follows:
 
-*   summary
-*   mean
-*   median
-*   sd
-*   var
-*   IQR
-*   range
-*   min
-*   max
-*   n, which is the length of a vector
-*   n_distinct, which is the number of distinct values of a vector
+* summary
+* mean
+* median
+* sd
+* var
+* IQR
+* range
+* min
+* max
+* n, which is the length of a vector
+* n_distinct, which is the number of distinct values of a vector
 
 ```R
 data(iris)
