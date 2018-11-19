@@ -101,7 +101,32 @@ ds[1:50,1:2]
 ```R
 iris$Species = as.factor(iris$Species)
 levels(iris$Species)
+```
 
+### Renaming Columns
+
+We can rename a column by using the rename verb, for example:
+```R
+data(iris)
+
+# In this case we rename the Sepal.Length column into
+# "sepallengthnewname"
+iris %>% rename(sepallengthnewname = "Sepal.Length")
+```
+
+
+### Creation of new columns with apply
+
+```R
+# m is our dataframe, here we create a new column which keeps the maximum
+# between the columns V2 and V3
+m$max = apply(m %>% select(c(V2, V3)), 1, max)
+
+# here we do the same, but we compute the average
+m$mean_v2_v3 = apply(m %>% select(c(V2, V3)), 1, mean)
+
+# Here we apply the mean to all columns per row
+m$max = apply(m, 1, mean)
 ```
 
 ### Basic Plotting
@@ -172,6 +197,7 @@ merged_ds = merge(ds1, ds2, by.x='c', by.y='d')
 
 merge(ds1, ds2, by='c')
 ```
+
 
 
 
