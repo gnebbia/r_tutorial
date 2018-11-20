@@ -1,5 +1,6 @@
 # R Tutorial
 
+
 In R we general work with the following common packages:
 
     * dplyr, used to manipulate data
@@ -31,6 +32,11 @@ str(ds)
 class(ds)
 ```
 
+```R
+# To inspect functions and classes contained in a package, we can do:
+ls(package:MASS)
+```
+
 To select a single column we can do:
 ```R
 ds$colname
@@ -51,6 +57,7 @@ tail(ds, 18) # shows 18 elements from the tail
 ```R
 x = c(4,2,45,10) # creates a 4 element vector
 y = seq(1,12) # creates a 12 element vector
+y = seq(1,100, by=4) # creates a 100 element vector, with elements skipped by 4 units
 s = seq(from=4, length=3, by=3) # creates a 3 element vector
 z = matrix(seq(1,12), 4,3) # creates a 4x3 matrix
 ```
@@ -63,7 +70,13 @@ x = rnorm(n, mean = 2, sd = 5)
 
 ```R
 ls() # shows current variables in the environment
+ls(package:MASS) # shows the functions and classes provided by the package called "MASS"
 rm(var1) # removes var1 from the environment
+```
+
+```R
+install.packages(c("MASS", "ggplot2")) # installs the mentioned packages
+installed.packages() # shows the list of installed packages
 ```
 
 ```R
@@ -94,6 +107,12 @@ ds[1:50,1:4]
 
 # Takes the first 50 rows and the first 2 columns
 ds[1:50,1:2]
+```
+
+We can select only numeric variables from a dataframe with:
+```R
+data(iris)
+select_if(iris, is.numeric)
 ```
 
 ### Basic Data Type Transformation
@@ -573,7 +592,7 @@ summary(fit2)
 plot(medv~lstat)
 points(lstat, fitted(fit2), col="red", pch=20)
 
-q```
+```
 
 Another example with polynomial features:
 ```R
@@ -584,6 +603,20 @@ plot(medv~lstat, Boston)
 fit1 = lm(medv~poly(lstat,4), Boston)
 points(Boston$lstat, fitted(fit7), col="red", pch=20)
 ```
+
+
+Let's see how to add other interactions in a model
+```R
+# Here we add all the features and the interaction terms
+# between Income and Advertising and interactions between Age and Price
+fit1 = lm(Sales ~. + Income:Advertising + Age:Price, Carseats)
+
+# We can show how R encodes categorical variables
+contrasts(Carseats$ShelveLoc) 
+
+```
+
+
 
 
 #### Updating a model
@@ -604,3 +637,37 @@ plot(medv~lstat, Boston)
 points(Boston$lstat, fitted(fit2), col="red", pch=20)
 ```
 
+
+### Classification in R
+
+```R
+
+require(ISLR)
+names(Smarket)
+summary(Smarket)
+?Smarket
+
+pairs(Smarket, col = Smarket$Direction)
+
+# Logistic Regression
+glm.fit = glm(Direction ~ Lag1 + Lag2 + Lag3 + Lag4 + Lag5 + Volume, data = Smarket, family=binomial)
+
+summary(glm.fit)
+
+# Obtain predictions probabilities
+glm.probs = predict(glm.fit, type='response')
+
+# Transform prediction probabilities into predictions by setting a threshold
+glm.pred = ifelse(glm.probs > 0.5, "Up", "Down")
+```
+
+
+## Appendix A
+
+### Fixing output of columns from R console
+Sometimes R could break our output to a limited amount of columns, in order to
+fix this, we can do:
+
+```R
+options(width=Sys.getenv("COLUMNS"))
+```
