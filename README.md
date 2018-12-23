@@ -207,9 +207,9 @@ ds2 = cbind(ds2, c = seq(1,150))
 merged_ds = merge(ds1, ds2, by='c')
 
 ds1 = iris %>% select("Sepal.Length")
-ds1 = cbind(ds1, c = seq(1,150))
+ds1 = cbind(ds1, colname = seq(1,150))
 ds2 = iris %>% select("Species")
-ds2 = cbind(ds2, d = seq(1,150))
+ds2 = cbind(ds2, newcol = seq(1,150))
 
 # Merge on fields with different field name
 merged_ds = merge(ds1, ds2, by.x='c', by.y='d')
